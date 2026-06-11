@@ -112,3 +112,4 @@ When fresh data is unavailable, the app keeps friendly messaging on screen and u
 - Constructor detail pages and race weekend session deep dives
 - Automated screenshot generation for README assets
 # f1-live-dashboard
+# f1-live-dashboard
