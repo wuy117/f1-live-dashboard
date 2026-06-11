@@ -16,25 +16,6 @@ Product goals:
 - Make standings and race results explorable through driver profiles
 - Present complex racing information in a mobile-friendly interface
 
-## Screenshots
-
-### Dashboard
-
-![Dashboard](screenshots/Dashboard.png)
-
-### Driver Comparison
-
-![Comparison](screenshots/Comparison.png)
-
-### Mobile View
-
-![Mobile](screenshots/Mobile.png)
-
-### Race Centre
-
-![RaceCentre](screenshots/RaceCentre.png)
-
-
 ## Features
 
 - Large race countdown hero for the next Grand Prix
@@ -73,23 +54,21 @@ npm run build
 
 ## Screenshots
 
-Add screenshots here after capturing the app locally:
+### Dashboard
 
-- Home dashboard hero and Race Centre
-- Live session panel
-- Standings, battle tracker, and driver comparison
-- Driver profile modal
-- Mobile layout
+![Dashboard](screenshots/Dashboard.png)
 
-Suggested layout:
+### Driver Comparison
 
-| Dashboard | Live Timing |
-| --- | --- |
-| `screenshots/dashboard.png` | `screenshots/live.png` |
+![Comparison](screenshots/Comparison.png)
 
-| Standings | Mobile |
-| --- | --- |
-| `screenshots/standings.png` | `screenshots/mobile.png` |
+### Mobile View
+
+![Mobile](screenshots/Mobile.png)
+
+### Race Centre
+
+![RaceCentre](screenshots/RaceCentre.png)
 
 ## APIs Used
 
