@@ -1,4 +1,5 @@
 export type ThemePreference = 'dark' | 'light';
+export type DataConfidence = 'Live' | 'Cached' | 'Historical' | 'Unavailable';
 
 export interface Driver {
   id: string;
@@ -144,6 +145,7 @@ export interface LiveSessionData {
   weather?: OpenF1Weather;
   messages: RaceControlMessage[];
   isLiveFallback: boolean;
+  confidence: DataConfidence;
   lastUpdated?: string;
 }
 

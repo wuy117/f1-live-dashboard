@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
 import { classNames } from '../utils/formatters';
 
@@ -11,7 +12,12 @@ interface DashboardCardProps {
 
 export function DashboardCard({ title, eyebrow, children, className, action }: DashboardCardProps) {
   return (
-    <section className={classNames('panel p-5 transition duration-300 hover:border-white/20 hover:shadow-[0_22px_70px_rgba(0,0,0,0.36)]', className)}>
+    <motion.section
+      className={classNames('panel p-5 transition duration-300 hover:border-white/20 hover:shadow-[0_22px_70px_rgba(0,0,0,0.36)]', className)}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.28, ease: 'easeOut' }}
+    >
       {(title || eyebrow || action) && (
         <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -22,6 +28,6 @@ export function DashboardCard({ title, eyebrow, children, className, action }: D
         </div>
       )}
       {children}
-    </section>
+    </motion.section>
   );
 }

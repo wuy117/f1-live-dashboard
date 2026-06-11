@@ -1,12 +1,16 @@
 import { Activity, Moon, Sun, Trophy } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { ChartsSection } from './components/ChartsSection';
+import { ChampionshipBattleTracker } from './components/ChampionshipBattleTracker';
 import { DashboardCard } from './components/DashboardCard';
+import { DriverProfileModal } from './components/DriverProfileModal';
 import { DriverComparison } from './components/DriverComparison';
+import { EmptyState } from './components/EmptyState';
 import { ErrorMessage } from './components/ErrorMessage';
 import { FavouriteDriverCard } from './components/FavouriteDriverCard';
 import { LiveSessionPanel } from './components/LiveSessionPanel';
 import { LoadingSkeleton } from './components/LoadingSkeleton';
+import { RaceCentre } from './components/RaceCentre';
 import { RaceSchedule } from './components/RaceSchedule';
 import { RaceCountdownHero } from './components/RaceCountdownHero';
 import { StandingsTable } from './components/StandingsTable';
@@ -29,6 +33,7 @@ export default function App() {
   const [compareDriverB, setCompareDriverB] = useLocalStorage('f1-live-dashboard:compare-driver-b', '');
   const [driverSearch, setDriverSearch] = useState('');
   const [teamFilter, setTeamFilter] = useState('All teams');
+  const [selectedDriverId, setSelectedDriverId] = useState<string | undefined>();
 
   const favouriteOptions = data?.driverStandings.filter((item) => item.driver).map((item) => item.driver!) ?? [];
 
@@ -108,6 +113,7 @@ export default function App() {
 
             {activeSection === 'Overview' && (
               <div className="mt-5 space-y-5">
+                <RaceCentre race={data?.nextRace} jolpicaError={error} />
                 <section className="grid gap-5 xl:grid-cols-[1fr_0.85fr]">
                   <DriverComparison
                     standings={data?.driverStandings ?? []}
@@ -119,6 +125,7 @@ export default function App() {
                   />
                   <FavouriteDriverCard favouriteDriverId={favouriteDriverId} standings={data?.driverStandings ?? []} latestRace={data?.latestRace} />
                 </section>
+                <ChampionshipBattleTracker standings={data?.driverStandings ?? []} favouriteDriverId={favouriteDriverId} />
 
                 <section className="grid gap-5 lg:grid-cols-3">
                   <DashboardCard title="Latest Winner" eyebrow="Race result" action={<Trophy className="h-5 w-5 text-yellow-300" />}>
@@ -144,7 +151,10 @@ export default function App() {
             {activeSection === 'Live' && (
               <div className="mt-5 grid gap-5 xl:grid-cols-3">
                 <LiveSessionPanel />
-                <RaceSchedule race={data?.nextRace} />
+                <div className="space-y-5">
+                  <RaceCentre race={data?.nextRace} jolpicaError={error} />
+                  <RaceSchedule race={data?.nextRace} />
+                </div>
               </div>
             )}
 
@@ -159,8 +169,10 @@ export default function App() {
                   onSearchChange={setDriverSearch}
                   onTeamFilterChange={setTeamFilter}
                   onFavouriteChange={setFavouriteDriverId}
+                  onDriverSelect={setSelectedDriverId}
                 />
                 <StandingsTable type="constructors" standings={data?.constructorStandings ?? []} />
+                <ChampionshipBattleTracker standings={data?.driverStandings ?? []} favouriteDriverId={favouriteDriverId} />
                 <DriverComparison
                   standings={data?.driverStandings ?? []}
                   latestRace={data?.latestRace}
@@ -175,7 +187,7 @@ export default function App() {
 
             {activeSection === 'Results' && (
               <div className="mt-5 space-y-5">
-                <LatestRaceResultsSection data={data} favouriteDriverId={favouriteDriverId} />
+                <LatestRaceResultsSection data={data} favouriteDriverId={favouriteDriverId} onDriverSelect={setSelectedDriverId} />
                 <DashboardCard title="Latest Qualifying" eyebrow="Grid form">
                   {qualifyingSummary.length ? (
                     <div className="grid gap-3 md:grid-cols-3">
@@ -197,6 +209,12 @@ export default function App() {
           </>
         )}
       </div>
+      <DriverProfileModal
+        driverId={selectedDriverId}
+        standings={data?.driverStandings ?? []}
+        latestRace={data?.latestRace}
+        onClose={() => setSelectedDriverId(undefined)}
+      />
     </main>
   );
 }
@@ -222,7 +240,15 @@ function TopFive({ title, items }: { title: string; items: { name: string; meta:
   );
 }
 
-function LatestRaceResultsSection({ data, favouriteDriverId }: { data?: ReturnType<typeof useF1Data>['data']; favouriteDriverId: string }) {
+function LatestRaceResultsSection({
+  data,
+  favouriteDriverId,
+  onDriverSelect,
+}: {
+  data?: ReturnType<typeof useF1Data>['data'];
+  favouriteDriverId: string;
+  onDriverSelect: (driverId: string) => void;
+}) {
   const latest = data?.latestRace;
   return (
     <DashboardCard title={latest?.raceName ?? 'Latest Race Results'} eyebrow="Classified order">
@@ -231,7 +257,7 @@ function LatestRaceResultsSection({ data, favouriteDriverId }: { data?: ReturnTy
           <div className="mb-4 text-sm text-slate-400">
             {latest.circuitName} · {formatDateTime(latest.date)}
           </div>
-          <div className="overflow-x-auto">
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full min-w-[760px] border-separate border-spacing-0 text-sm">
               <thead className="sticky top-0 bg-[#111119]/95 backdrop-blur">
                 <tr className="text-left text-xs uppercase tracking-[0.16em] text-slate-500">
@@ -253,7 +279,11 @@ function LatestRaceResultsSection({ data, favouriteDriverId }: { data?: ReturnTy
                       <span className="mr-2 inline-block h-6 w-1 rounded-full bg-[var(--team-color)] align-middle" />
                       P{result.position}
                     </td>
-                    <td className="border-b border-white/5 px-3 py-3 font-semibold text-white">{result.driver.fullName}</td>
+                    <td className="border-b border-white/5 px-3 py-3 font-semibold text-white">
+                      <button type="button" onClick={() => onDriverSelect(result.driver.id)} className="text-left transition hover:text-f1-red">
+                        {result.driver.fullName}
+                      </button>
+                    </td>
                     <td className="border-b border-white/5 px-3 py-3 text-slate-300">{result.constructor.name}</td>
                     <td className="border-b border-white/5 px-3 py-3 text-slate-300">{result.timeOrStatus}</td>
                     <td className="border-b border-white/5 px-3 py-3 text-right font-mono font-bold text-white">{result.points}</td>
@@ -262,9 +292,30 @@ function LatestRaceResultsSection({ data, favouriteDriverId }: { data?: ReturnTy
               </tbody>
             </table>
           </div>
+          <div className="space-y-3 md:hidden">
+            {latest.results.map((result) => (
+              <div
+                key={`mobile-result-${result.position}-${result.driver.id}`}
+                className={classNames('team-accent-card rounded-xl border border-white/10 bg-black/25 p-4', result.driver.id === favouriteDriverId && 'bg-f1-red/10')}
+                style={teamAccentStyle(result.constructor.name)}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-mono text-sm font-bold text-[var(--team-color)]">P{result.position}</p>
+                    <button type="button" onClick={() => onDriverSelect(result.driver.id)} className="mt-1 block max-w-full truncate text-left text-lg font-black text-white transition hover:text-f1-red">
+                      {result.driver.fullName}
+                    </button>
+                    <p className="truncate text-sm text-slate-400">{result.constructor.name}</p>
+                  </div>
+                  <p className="font-mono text-lg font-black text-white">{result.points}</p>
+                </div>
+                <p className="mt-3 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-slate-300">{result.timeOrStatus}</p>
+              </div>
+            ))}
+          </div>
         </>
       ) : (
-        <p className="text-sm text-slate-400">Latest race results are unavailable right now.</p>
+        <EmptyState title="Classification not ready" message="The latest race results are unavailable right now. Try again after the data providers finish their post-race checks." />
       )}
     </DashboardCard>
   );

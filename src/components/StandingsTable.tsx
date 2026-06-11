@@ -3,6 +3,7 @@ import type { Standing } from '../types/f1';
 import { classNames } from '../utils/formatters';
 import { teamAccentStyle } from '../utils/teamColors';
 import { DashboardCard } from './DashboardCard';
+import { EmptyState } from './EmptyState';
 
 interface StandingsTableProps {
   type: 'drivers' | 'constructors';
@@ -13,6 +14,7 @@ interface StandingsTableProps {
   onSearchChange?: (value: string) => void;
   onTeamFilterChange?: (value: string) => void;
   onFavouriteChange?: (driverId: string) => void;
+  onDriverSelect?: (driverId: string) => void;
 }
 
 export function StandingsTable({
@@ -24,6 +26,7 @@ export function StandingsTable({
   onSearchChange,
   onTeamFilterChange,
   onFavouriteChange,
+  onDriverSelect,
 }: StandingsTableProps) {
   const teams = ['All teams', ...Array.from(new Set(standings.map((item) => item.driver?.team ?? item.constructor?.name).filter(Boolean) as string[]))];
   const filtered = standings.filter((item) => {
@@ -62,6 +65,10 @@ export function StandingsTable({
         ) : undefined
       }
     >
+      {filtered.length === 0 ? (
+        <EmptyState title="No cars match that filter" message="Try another driver search or team filter to bring the timing tower back to life." />
+      ) : (
+        <>
       <div className="hidden overflow-x-auto md:block">
         <table className="w-full min-w-[640px] border-separate border-spacing-0 text-sm">
           <thead className="sticky top-0 z-10 bg-[#111119]/95 backdrop-blur">
@@ -100,7 +107,17 @@ export function StandingsTable({
                           <Star className={classNames('h-4 w-4', isFavourite && 'fill-f1-red text-f1-red')} />
                         </button>
                       )}
-                      {item.driver?.fullName ?? item.constructor?.name}
+                      {item.driver ? (
+                        <button
+                          type="button"
+                          onClick={() => onDriverSelect?.(item.driver?.id ?? '')}
+                          className="text-left transition hover:text-f1-red"
+                        >
+                          {item.driver.fullName}
+                        </button>
+                      ) : (
+                        item.constructor?.name
+                      )}
                     </div>
                   </td>
                   <td className="border-b border-white/5 px-3 py-3 text-slate-300">{item.driver?.nationality ?? item.constructor?.nationality}</td>
@@ -126,7 +143,17 @@ export function StandingsTable({
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="font-mono text-sm font-bold text-[var(--team-color)]">P{item.position}</p>
-                  <p className="mt-1 truncate text-lg font-black text-white">{item.driver?.fullName ?? item.constructor?.name}</p>
+                  {item.driver ? (
+                    <button
+                      type="button"
+                      onClick={() => onDriverSelect?.(item.driver?.id ?? '')}
+                      className="mt-1 block max-w-full truncate text-left text-lg font-black text-white transition hover:text-f1-red"
+                    >
+                      {item.driver.fullName}
+                    </button>
+                  ) : (
+                    <p className="mt-1 truncate text-lg font-black text-white">{item.constructor?.name}</p>
+                  )}
                   <p className="truncate text-sm text-slate-400">{team ?? item.driver?.nationality ?? item.constructor?.nationality}</p>
                 </div>
                 {type === 'drivers' && (
@@ -149,6 +176,8 @@ export function StandingsTable({
           );
         })}
       </div>
+        </>
+      )}
     </DashboardCard>
   );
 }

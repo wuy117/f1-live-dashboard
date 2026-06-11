@@ -66,6 +66,14 @@ export async function getLiveSessionData(): Promise<ApiResult<LiveSessionData>> 
       messages.fromCache ||
       session.date_end < new Date().toISOString(),
   );
+  const hasAnyTimingData = Boolean((positions.data?.length ?? 0) + (laps.data?.length ?? 0) + (weather.data?.length ?? 0) + (messages.data?.length ?? 0));
+  const confidence = !hasAnyTimingData
+    ? 'Unavailable'
+    : [sessionResult, drivers, positions, laps, intervals, weather, messages].some((item) => item.fromCache)
+      ? 'Cached'
+      : session.date_end < new Date().toISOString()
+        ? 'Historical'
+        : 'Live';
   return {
     error: [sessionResult, drivers, positions, laps, intervals, weather, messages].find((item) => item.error)?.error,
     data: {
@@ -77,6 +85,7 @@ export async function getLiveSessionData(): Promise<ApiResult<LiveSessionData>> 
       weather: weather.data?.at(-1),
       messages: (messages.data ?? []).slice(-8).reverse(),
       isLiveFallback,
+      confidence,
       lastUpdated: new Date().toISOString(),
     },
   };

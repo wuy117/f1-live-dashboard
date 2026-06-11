@@ -1,10 +1,12 @@
-import { RefreshCw, Radio, CloudSun, Flag } from 'lucide-react';
+import { RefreshCw, CloudSun, Flag } from 'lucide-react';
 import { getLiveSessionData } from '../api/openf1';
 import { usePolling } from '../hooks/usePolling';
 import { formatDateTime } from '../utils/dates';
 import { classNames, formatLapDuration, friendlyNumber } from '../utils/formatters';
 import { teamAccentStyle } from '../utils/teamColors';
 import { DashboardCard } from './DashboardCard';
+import { DataConfidenceBadge } from './DataConfidenceBadge';
+import { EmptyState } from './EmptyState';
 import { ErrorMessage } from './ErrorMessage';
 import { LoadingSkeleton } from './LoadingSkeleton';
 
@@ -36,10 +38,7 @@ export function LiveSessionPanel() {
         <div className="space-y-5">
           <div className="rounded-xl border border-white/10 bg-black/30 p-4">
             <div className="flex flex-wrap items-center gap-3 text-sm">
-              <span className={classNames('inline-flex items-center gap-2 rounded-full border px-3 py-1 font-bold uppercase tracking-[0.14em]', data?.isLiveFallback ? 'border-amber-300/30 bg-amber-300/10 text-amber-100' : 'border-f1-red/40 bg-f1-red/15 text-red-100')}>
-              <Radio className="h-4 w-4" />
-                {data?.isLiveFallback ? 'Timing fallback' : 'Timing feed active'}
-              </span>
+              <DataConfidenceBadge confidence={data?.confidence ?? 'Unavailable'} label={data?.isLiveFallback ? 'Timing fallback' : 'Timing feed'} />
               {data?.session && <span className="font-semibold text-white">{data.session.circuit_short_name}, {data.session.country_name}</span>}
               <span className="text-slate-500">
                 Last updated {new Date(data?.lastUpdated ?? lastUpdated ?? Date.now()).toLocaleTimeString()}
@@ -65,7 +64,7 @@ export function LiveSessionPanel() {
                   <Metric label="Wind" value={`${friendlyNumber(data.weather.wind_speed)} m/s`} />
                 </dl>
               ) : (
-                <p className="text-sm text-slate-500">Weather feed unavailable for this session.</p>
+                <EmptyState title="Weather feed quiet" message="OpenF1 has not published weather for this session yet." />
               )}
             </div>
 
@@ -84,7 +83,7 @@ export function LiveSessionPanel() {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-slate-500">No race control messages available.</p>
+                <EmptyState title="Race control is quiet" message="No race control messages are available for this session." />
               )}
             </div>
           </div>
@@ -122,7 +121,11 @@ export function LiveSessionPanel() {
                 })}
               </tbody>
             </table>
-            {!data?.positions.length && <p className="py-8 text-center text-sm text-slate-500">Driver positions are not available for this session.</p>}
+            {!data?.positions.length && (
+              <div className="p-4">
+                <EmptyState title="Timing tower on standby" message="Driver positions are not available for this session, so the last good session data will stay visible when possible." />
+              </div>
+            )}
           </div>
 
           {data?.session && (
