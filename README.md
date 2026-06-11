@@ -32,7 +32,7 @@ Product goals:
 
 ### Race Centre
 
-![RaceCentre](screenshots/Racecentre.png)
+![RaceCentre](screenshots/RaceCentre.png)
 
 
 ## Features
