@@ -35,9 +35,9 @@ export function DriverProfileModal({ driverId, standings, latestRace, onClose }:
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--team-color)]">{team}</p>
-                <h2 className="mt-1 text-3xl font-black text-white">{standing.driver.fullName}</h2>
+              <div className="min-w-0">
+                <p className="overflow-hidden text-ellipsis text-xs font-bold uppercase tracking-[0.12em] text-[var(--team-color)]">{team}</p>
+                <h2 className="mt-1 break-words text-3xl font-black text-white [overflow-wrap:anywhere]">{standing.driver.fullName}</h2>
                 <p className="mt-1 text-sm text-slate-400">{standing.driver.nationality}</p>
               </div>
               <button
@@ -75,8 +75,8 @@ export function DriverProfileModal({ driverId, standings, latestRace, onClose }:
 function ProfileStat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
-      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">{label}</p>
-      <p className="mt-1 font-mono text-xl font-black text-white">{value}</p>
+      <p className="overflow-hidden text-ellipsis text-[10px] font-bold uppercase tracking-[0.06em] text-slate-500">{label}</p>
+      <p className="mt-1 overflow-hidden text-ellipsis font-mono text-xl font-black text-white">{value}</p>
     </div>
   );
 }

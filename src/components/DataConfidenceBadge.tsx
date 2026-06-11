@@ -11,15 +11,15 @@ export function DataConfidenceBadge({ confidence, label }: DataConfidenceBadgePr
   return (
     <span
       className={classNames(
-        'inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.14em]',
+        'inline-flex max-w-full items-center gap-2 rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.08em]',
         confidence === 'Live' && 'border-f1-red/50 bg-f1-red/15 text-red-100',
         confidence === 'Cached' && 'border-amber-300/35 bg-amber-300/10 text-amber-100',
         confidence === 'Historical' && 'border-sky-300/35 bg-sky-300/10 text-sky-100',
         confidence === 'Unavailable' && 'border-slate-500/35 bg-slate-500/10 text-slate-300',
       )}
     >
-      {confidence === 'Live' ? <Circle className="h-2.5 w-2.5 fill-current" /> : <DatabaseZap className="h-3.5 w-3.5" />}
-      {label ?? confidence}
+      {confidence === 'Live' ? <Circle className="h-2.5 w-2.5 shrink-0 fill-current" /> : <DatabaseZap className="h-3.5 w-3.5 shrink-0" />}
+      <span className="min-w-0 overflow-hidden text-ellipsis">{label ?? confidence}</span>
     </span>
   );
 }

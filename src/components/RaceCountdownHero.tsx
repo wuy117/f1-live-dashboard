@@ -47,7 +47,7 @@ export function RaceCountdownHero({ race }: RaceCountdownHeroProps) {
             </span>
           </div>
 
-          <h2 className="max-w-4xl text-4xl font-black uppercase leading-[0.95] text-white sm:text-6xl lg:text-7xl">
+          <h2 className="max-w-4xl break-words text-4xl font-black uppercase leading-[0.95] text-white [overflow-wrap:anywhere] sm:text-6xl lg:text-7xl">
             {race?.raceName ?? 'Grand Prix TBC'}
           </h2>
           <div className="mt-5 grid gap-3 text-sm text-slate-300 sm:grid-cols-3">
@@ -55,7 +55,7 @@ export function RaceCountdownHero({ race }: RaceCountdownHeroProps) {
             <HeroFact icon={<MapPin className="h-4 w-4" />} label="Country" value={race?.country ?? 'Country TBC'} />
             <HeroFact icon={<CalendarClock className="h-4 w-4" />} label="Race Date" value={race ? formatDateTime(race.date, race.time) : 'Date TBC'} />
           </div>
-          <p className="mt-4 inline-flex rounded-full border border-white/10 bg-black/30 px-3 py-1 text-sm text-slate-400">
+          <p className="mt-4 inline-flex max-w-full flex-wrap rounded-full border border-white/10 bg-black/30 px-3 py-1 text-sm text-slate-400">
             Race weekend: {formatDateRange(race?.sessions[0]?.date, race?.date)}
           </p>
         </div>
@@ -83,7 +83,7 @@ function HeroFact({ icon, label, value }: { icon: ReactNode; label: string; valu
         {icon}
         {label}
       </div>
-      <p className="mt-2 text-sm font-semibold text-white">{value}</p>
+      <p className="mt-2 break-words text-sm font-semibold text-white [overflow-wrap:anywhere]">{value}</p>
     </div>
   );
 }

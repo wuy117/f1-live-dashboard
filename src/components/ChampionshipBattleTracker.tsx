@@ -55,7 +55,7 @@ function BattleCard({ title, primary, secondary, gap }: { title: string; primary
         <BattleRow standing={secondary} width={secondaryWidth} />
       </div>
       <p className="mt-4 font-mono text-2xl font-black text-white">{gap} pts</p>
-      <p className="text-xs text-slate-500">Gap between {primary.driver?.familyName} and {secondary.driver?.familyName}</p>
+      <p className="break-words text-xs text-slate-500 [overflow-wrap:anywhere]">Gap between {primary.driver?.familyName} and {secondary.driver?.familyName}</p>
     </div>
   );
 }
@@ -65,8 +65,8 @@ function BattleRow({ standing, width }: { standing: Standing; width: number }) {
   return (
     <div style={teamAccentStyle(team)}>
       <div className="mb-1 flex items-center justify-between gap-3 text-sm">
-        <span className="truncate font-semibold text-white">P{standing.position} · {standing.driver?.fullName}</span>
-        <span className="font-mono text-slate-300">{standing.points}</span>
+        <span className="min-w-0 truncate font-semibold text-white">P{standing.position} · {standing.driver?.fullName}</span>
+        <span className="shrink-0 font-mono text-slate-300">{standing.points}</span>
       </div>
       <div className="h-2 overflow-hidden rounded-full bg-white/10">
         <motion.div

@@ -60,12 +60,12 @@ export function DriverComparison({
         <DriverSelect label="Driver B" value={second?.driver?.id ?? ''} options={options} onChange={onSecondDriverChange} />
       </div>
 
-      <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_220px_1fr]">
+      <div className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(140px,180px)_minmax(0,1fr)]">
         <ComparisonCard standing={first} latestRace={latestRace} align="left" />
-        <div className="rounded-xl border border-white/10 bg-black/30 p-4 text-center">
+        <div className="min-w-0 rounded-xl border border-white/10 bg-black/30 p-4 text-center">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Points gap</p>
           <p className="mt-2 font-mono text-4xl font-black text-white">{pointsGap}</p>
-          <p className="mt-2 text-sm text-slate-400">{leader === 'Level' ? 'Drivers are level' : `${leader} ahead`}</p>
+          <p className="mt-2 overflow-hidden text-ellipsis text-sm text-slate-400">{leader === 'Level' ? 'Drivers are level' : `${leader} ahead`}</p>
         </div>
         <ComparisonCard standing={second} latestRace={latestRace} align="right" />
       </div>
@@ -110,15 +110,15 @@ function ComparisonCard({ standing, latestRace, align }: { standing?: Standing; 
   return (
     <div
       className={classNames(
-        'team-accent-card rounded-xl border border-white/10 bg-white/[0.04] p-4',
+        'team-accent-card min-w-0 rounded-xl border border-white/10 bg-white/[0.04] p-4',
         align === 'right' && 'lg:text-right',
       )}
       style={teamAccentStyle(team)}
     >
-      <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--team-color)]">{team ?? 'Team TBC'}</p>
-      <h3 className="mt-2 text-2xl font-black text-white">{driver?.fullName ?? 'Driver TBC'}</h3>
+      <p className="max-w-full overflow-hidden text-ellipsis text-xs font-bold uppercase tracking-[0.12em] text-[var(--team-color)]">{team ?? 'Team TBC'}</p>
+      <h3 className="mt-2 overflow-hidden text-ellipsis text-2xl font-black text-white">{driver?.fullName ?? 'Driver TBC'}</h3>
       <div className="mt-5 grid grid-cols-2 gap-3">
-        <Stat label="Position" value={standing ? `P${standing.position}` : '--'} />
+        <Stat label="Pos" value={standing ? `P${standing.position}` : '--'} />
         <Stat label="Points" value={String(standing?.points ?? '--')} />
         <Stat label="Wins" value={String(standing?.wins ?? 0)} />
         <Stat label="Latest" value={result ? `P${result.position}` : '--'} />
@@ -129,9 +129,9 @@ function ComparisonCard({ standing, latestRace, align }: { standing?: Standing; 
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-black/25 p-3">
-      <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500">{label}</p>
-      <p className="mt-1 font-mono text-lg font-bold text-white">{value}</p>
+    <div className="min-w-0 rounded-lg border border-white/10 bg-black/25 p-3">
+      <p className="max-w-full overflow-hidden text-ellipsis text-[10px] font-bold uppercase tracking-[0.06em] text-slate-500">{label}</p>
+      <p className="mt-1 overflow-hidden text-ellipsis font-mono text-lg font-bold text-white">{value}</p>
     </div>
   );
 }

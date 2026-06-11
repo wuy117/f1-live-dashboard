@@ -50,8 +50,8 @@ export function RaceCentre({ race, jolpicaError }: RaceCentreProps) {
               <DataConfidenceBadge confidence={raceConfidence} label="Jolpica calendar" />
               <DataConfidenceBadge confidence={timingConfidence} label="OpenF1 timing" />
             </div>
-            <h3 className="mt-4 text-3xl font-black uppercase text-white">{race.raceName}</h3>
-            <p className="mt-1 text-sm text-slate-400">{race.circuitName} · {race.country}</p>
+            <h3 className="mt-4 break-words text-3xl font-black uppercase text-white [overflow-wrap:anywhere]">{race.raceName}</h3>
+            <p className="mt-1 break-words text-sm text-slate-400 [overflow-wrap:anywhere]">{race.circuitName} · {race.country}</p>
             <div className="mt-5 grid grid-cols-3 gap-2">
               {countdown.map((part) => (
                 <div key={part.label} className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-center">
@@ -121,7 +121,7 @@ function CentreFact({ icon, label, value, tone = 'text-white' }: { icon: ReactNo
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
       <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">{icon}{label}</div>
-      <p className={classNames('mt-2 text-sm font-bold capitalize', tone)}>{value}</p>
+      <p className={classNames('mt-2 break-words text-sm font-bold capitalize [overflow-wrap:anywhere]', tone)}>{value}</p>
     </div>
   );
 }
@@ -130,7 +130,7 @@ function WeatherStat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border border-white/10 bg-white/[0.04] p-3">
       <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">{label}</p>
-      <p className="mt-1 font-mono font-bold text-white">{value}</p>
+      <p className="mt-1 overflow-hidden text-ellipsis font-mono font-bold text-white">{value}</p>
     </div>
   );
 }

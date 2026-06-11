@@ -10,7 +10,7 @@ interface ChartsSectionProps {
 
 export function ChartsSection({ driverStandings, constructorStandings, latestRace }: ChartsSectionProps) {
   const driverData = driverStandings.slice(0, 10).map((item) => ({ name: item.driver?.code ?? item.driver?.familyName ?? 'DRV', points: item.points }));
-  const constructorData = constructorStandings.map((item) => ({ name: item.constructor?.name ?? 'Team', points: item.points }));
+  const constructorData = constructorStandings.map((item) => ({ name: shortChartLabel(item.constructor?.name ?? 'Team'), points: item.points }));
   const raceData = latestRace?.results.slice(0, 10).map((item) => ({ name: item.driver.code ?? item.driver.familyName, points: item.points })) ?? [];
 
   return (
@@ -30,7 +30,7 @@ function ChartCard({ title, data, color }: { title: string; data: { name: string
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} margin={{ top: 8, right: 8, left: -16, bottom: 24 }}>
               <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
-              <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 11 }} interval={0} angle={-25} textAnchor="end" />
+              <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 11 }} interval={0} angle={-25} textAnchor="end" height={48} />
               <YAxis stroke="#94a3b8" tick={{ fontSize: 11 }} />
               <Tooltip
                 cursor={{ fill: 'rgba(255,255,255,0.06)' }}
@@ -45,4 +45,21 @@ function ChartCard({ title, data, color }: { title: string; data: { name: string
       </div>
     </DashboardCard>
   );
+}
+
+function shortChartLabel(label: string): string {
+  const aliases: Record<string, string> = {
+    Mercedes: 'Mercedes',
+    Ferrari: 'Ferrari',
+    McLaren: 'McLaren',
+    'Red Bull': 'Red Bull',
+    'Aston Martin': 'Aston',
+    'Alpine F1 Team': 'Alpine',
+    Williams: 'Williams',
+    Haas: 'Haas',
+    'Racing Bulls': 'RB',
+    Sauber: 'Sauber',
+  };
+  const match = Object.entries(aliases).find(([name]) => label.toLowerCase().includes(name.toLowerCase()));
+  return match?.[1] ?? (label.length > 10 ? `${label.slice(0, 9)}…` : label);
 }
