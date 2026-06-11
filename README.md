@@ -2,6 +2,9 @@
 
 A premium Formula 1 fan dashboard built with React, TypeScript, Vite, Tailwind CSS, Recharts, Jolpica, and OpenF1. It blends a live timing screen, championship tracker, and team strategy wall into a fast client-only web app.
 
+## Live Demo:
+[https://f1-dashboard-five-xi.vercel.app/](https://f1-live-dashboard-psi.vercel.app)
+
 ## Portfolio Project
 
 F1 Live Dashboard is designed as a public portfolio-grade frontend project: it demonstrates API integration, defensive data handling, responsive product UI, persistent user preferences, animated interactions, and dashboard information architecture without relying on a backend.
@@ -12,6 +15,25 @@ Product goals:
 - Keep live-data uncertainty transparent with confidence labels
 - Make standings and race results explorable through driver profiles
 - Present complex racing information in a mobile-friendly interface
+
+## Screenshots
+
+### Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+### Driver Comparison
+
+![Comparison](screenshots/comparison.png)
+
+### Mobile View
+
+![Mobile](screenshots/mobile.png)
+
+### Race Centre
+
+![RaceCentre](screenshots/racecentre.png)
+
 
 ## Features
 
