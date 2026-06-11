@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #07070b;
+}
+
+::selection {
+  background: rgba(225, 6, 0, 0.55);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(225, 6, 0, 0.55);
+  border-radius: 999px;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+option {
+  background: #111119;
+  color: #fff;
+}
+
+@layer components {
+  .panel {
+    @apply rounded-xl border border-white/10 shadow-[0_18px_50px_rgba(0,0,0,0.28)] backdrop-blur-xl;
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025)),
+      rgba(13, 13, 20, 0.82);
+  }
+
+  .hero-panel {
+    background:
+      linear-gradient(115deg, rgba(7, 7, 11, 0.96) 0%, rgba(17, 17, 25, 0.9) 45%, rgba(225, 6, 0, 0.18) 100%),
+      radial-gradient(circle at 88% 18%, rgba(225, 6, 0, 0.44), transparent 30%);
+  }
+
+  .team-accent-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .team-accent-card::before {
+    background: linear-gradient(180deg, var(--team-color, #e10600), transparent);
+    border-radius: 999px;
+    content: '';
+    height: calc(100% - 24px);
+    left: 0;
+    opacity: 0.9;
+    position: absolute;
+    top: 12px;
+    width: 3px;
+  }
+
+  .speed-lines {
+    background:
+      repeating-linear-gradient(115deg, transparent 0 18px, rgba(255, 255, 255, 0.06) 18px 20px, transparent 20px 44px),
+      linear-gradient(90deg, transparent, rgba(225, 6, 0, 0.16));
+    clip-path: polygon(24% 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+.theme-light {
+  color-scheme: light;
+}
+
+.theme-light > div:first-child {
+  background: radial-gradient(circle at top left, rgba(225, 6, 0, 0.16), transparent 30%),
+    linear-gradient(135deg, #f5f5f7 0%, #e8eaf0 48%, #ffffff 100%);
+}
