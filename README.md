@@ -20,19 +20,19 @@ Product goals:
 
 ### Dashboard
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screenshots/Dashboard.png)
 
 ### Driver Comparison
 
-![Comparison](screenshots/comparison.png)
+![Comparison](screenshots/Comparison.png)
 
 ### Mobile View
 
-![Mobile](screenshots/mobile.png)
+![Mobile](screenshots/Mobile.png)
 
 ### Race Centre
 
-![RaceCentre](screenshots/racecentre.png)
+![RaceCentre](screenshots/Racecentre.png)
 
 
 ## Features
